@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryptoGuard — Admin</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="app">
+  <div class="sidebar-scrim hidden" id="scrim" onclick="toggleSidebar(false)"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark" style="width:32px;height:32px;font-size:15px;"><i class="fa-solid fa-shield-halved"></i></div>
+      <div style="font-weight:800;font-size:15.5px;">Crypto<span style="color:var(--purple-2)">Guard</span> <span class="muted" style="font-size:11px;font-weight:600;">Admin</span></div>
+    </div>
+    <div class="nav-item active" data-view="overview" onclick="nav('overview')"><span class="ic"><i class="fa-solid fa-chart-pie"></i></span> Overview</div>
+    <div class="nav-item" data-view="createuser" onclick="nav('createuser')"><span class="ic"><i class="fa-solid fa-user-plus"></i></span> Create User</div>
+    <div class="nav-item" data-view="users" onclick="nav('users')"><span class="ic"><i class="fa-solid fa-users"></i></span> Manage Users</div>
+    <div class="nav-item" data-view="deposits" onclick="nav('deposits')"><span class="ic"><i class="fa-solid fa-qrcode"></i></span> Deposit Addresses</div>
+    <div class="nav-item" data-view="support" onclick="nav('support')"><span class="ic"><i class="fa-solid fa-headset"></i></span> Support Settings</div>
+    <div class="nav-item" data-view="withdrawals" onclick="nav('withdrawals')"><span class="ic"><i class="fa-solid fa-building-columns"></i></span> Withdrawal Requests <span id="pendingBadge" class="hidden" style="margin-left:auto;background:var(--red);color:#fff;font-size:10.5px;padding:1px 7px;border-radius:100px;"></span></div>
+    <div class="nav-spacer"></div>
+    <div class="nav-item" onclick="logout()"><span class="ic"><i class="fa-solid fa-right-from-bracket"></i></span> Logout</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="row gap-12">
+        <button class="menu-btn" onclick="toggleSidebar(true)"><i class="fa-solid fa-bars"></i></button>
+        <h2>Admin <span>Control Panel</span></h2>
+      </div>
+      <div class="avatar">A</div>
+    </div>
+    <div id="view-overview"></div>
+    <div id="view-createuser" class="hidden"></div>
+    <div id="view-users" class="hidden"></div>
+    <div id="view-deposits" class="hidden"></div>
+    <div id="view-support" class="hidden"></div>
+    <div id="view-withdrawals" class="hidden"></div>
+  </div>
+</div>
+<div id="modalRoot"></div>
+<script src="/js/api.js"></script>
+<script src="/js/countries.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

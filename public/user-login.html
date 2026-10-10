@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryptoGuard — User Login</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="login-wrap">
+  <div class="login-card" style="max-width:420px;">
+    <div class="brand">
+      <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+      <div class="brand-name">Crypto<span>Guard</span></div>
+    </div>
+    <div class="demo-banner">⚠ Demo environment — no real funds or blockchain networks are involved.</div>
+    <div class="card">
+      <div class="role-tabs">
+        <div class="role-tab active" data-tab="login" onclick="setTab('login')">Login</div>
+        <div class="role-tab" data-tab="register" onclick="setTab('register')">Create Account</div>
+      </div>
+
+      <div id="pane-login">
+        <div class="field"><label>Username</label><input id="loginUsername" placeholder="Enter your username"></div>
+        <div class="field" style="margin-bottom:8px;"><label>Password</label><input id="loginPassword" type="password" placeholder="Enter your password"></div>
+        <button class="btn btn-primary btn-block" id="loginBtn">Sign In</button>
+        <div class="login-note">Don't have an account? Use the "Create Account" tab above.</div>
+      </div>
+
+      <div id="pane-register" class="hidden">
+        <div class="field"><label>Full Name</label><input id="regName" placeholder="Your full name"></div>
+        <div class="field"><label>Email Address</label><input id="regEmail" type="email" placeholder="you@example.com"></div>
+        <div class="field"><label>Phone Number</label><input id="regPhone" placeholder="+1 555 123 4567"></div>
+        <div class="field"><label>Country</label><select id="regCountry"></select></div>
+        <div class="field"><label>Choose a Username</label><input id="regUsername" placeholder="3-20 characters, letters/numbers"></div>
+        <div class="field"><label>Choose a Password</label><input id="regPassword" type="password" placeholder="At least 6 characters"></div>
+        <div class="field" style="margin-bottom:8px;"><label>Confirm Password</label><input id="regPasswordConfirm" type="password" placeholder="Repeat password"></div>
+        <button class="btn btn-primary btn-block" id="registerBtn">Create Account</button>
+      </div>
+
+      <div class="login-note"><a href="/admin-login.html" style="color:var(--purple-2);">Are you an admin? Sign in here</a></div>
+      <div class="login-note"><a href="/index.html" style="color:var(--text-faint);">&larr; Back</a></div>
+    </div>
+  </div>
+</div>
+<script src="/js/api.js"></script>
+<script src="/js/countries.js"></script>
+<script>
+if (Session.token && Session.role === 'user') window.location.href = '/user.html';
+
+function toast(msg, type){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast' + (type==='err'?' err':type==='ok'?' ok':'');
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>el.remove(), 3600);
+}
+
+function setTab(tab){
+  document.querySelectorAll('.role-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  document.getElementById('pane-login').classList.toggle('hidden', tab!=='login');
+  document.getElementById('pane-register').classList.toggle('hidden', tab!=='register');
+}
+
+document.getElementById('regCountry').innerHTML = COUNTRIES.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+document.getElementById('loginBtn').addEventListener('click', async ()=>{
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if(!username || !password){ toast('Enter username and password','err'); return; }
+  try{
+    const data = await api('/auth/login', { method:'POST', body:{ role:'user', username, password } });
+    Session.set(data.token, data.role, data.name);
+    window.location.href = '/user.html';
+  }catch(e){
+    toast(e.message, 'err');
+  }
+});
+document.getElementById('loginPassword').addEventListener('keydown', e=>{
+  if(e.key==='Enter') document.getElementById('loginBtn').click();
+});
+
+document.getElementById('registerBtn').addEventListener('click', async ()=>{
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phoneNumber = document.getElementById('regPhone').value.trim();
+  const country = document.getElementById('regCountry').value;
+  const username = document.getElementById('regUsername').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regPasswordConfirm').value;
+
+  if(!name || !email || !phoneNumber || !country || !username || !password){ toast('Please fill in every field','err'); return; }
+  if(password !== confirm){ toast('Passwords do not match','err'); return; }
+
+  try{
+    const data = await api('/auth/register', { method:'POST', body:{ name, email, phoneNumber, country, username, password } });
+    Session.set(data.token, data.role, data.name);
+    toast('Account created!','ok');
+    window.location.href = '/user.html';
+  }catch(e){
+    toast(e.message, 'err');
+  }
+});
+</script>
+</body>
+</html>

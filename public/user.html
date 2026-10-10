@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryptoGuard — Dashboard</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="app">
+  <div class="sidebar-scrim hidden" id="scrim" onclick="toggleSidebar(false)"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark" style="width:32px;height:32px;font-size:15px;"><i class="fa-solid fa-shield-halved"></i></div>
+      <div style="font-weight:800;font-size:15.5px;">Crypto<span style="color:var(--purple-2)">Guard</span></div>
+    </div>
+    <div class="nav-item active" data-view="dashboard" onclick="nav('dashboard')"><span class="ic"><i class="fa-solid fa-gauge-high"></i></span> Dashboard</div>
+    <div class="nav-item" data-view="wallet" onclick="nav('wallet')"><span class="ic"><i class="fa-solid fa-wallet"></i></span> Wallet</div>
+    <div class="nav-item" data-view="account" onclick="nav('account')"><span class="ic"><i class="fa-solid fa-user"></i></span> My Account</div>
+    <div class="nav-item" data-view="transactions" onclick="nav('transactions')"><span class="ic"><i class="fa-solid fa-file-invoice"></i></span> Transactions <span id="notifBadge" class="hidden" style="margin-left:auto;background:var(--red);color:#fff;font-size:10.5px;padding:1px 7px;border-radius:100px;"></span></div>
+    <div class="nav-item" data-view="deposit" onclick="nav('deposit')"><span class="ic"><i class="fa-solid fa-arrow-down"></i></span> Deposit</div>
+    <div class="nav-item" data-view="withdraw" onclick="nav('withdraw')"><span class="ic"><i class="fa-solid fa-arrow-up"></i></span> Withdraw</div>
+    <div class="nav-item" data-view="buy" onclick="nav('buy')"><span class="ic"><i class="fa-solid fa-cart-shopping"></i></span> Buy Crypto</div>
+    <div class="nav-item" data-view="kyc" onclick="nav('kyc')"><span class="ic"><i class="fa-solid fa-id-card"></i></span> KYC Verification</div>
+    <div class="nav-item" data-view="support" onclick="nav('support')"><span class="ic"><i class="fa-solid fa-headset"></i></span> Support</div>
+    <div class="nav-spacer"></div>
+    <div class="nav-item" onclick="logout()"><span class="ic"><i class="fa-solid fa-right-from-bracket"></i></span> Logout</div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="row gap-12">
+        <button class="menu-btn" onclick="toggleSidebar(true)"><i class="fa-solid fa-bars"></i></button>
+        <h2 id="welcome">Welcome back!</h2>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+    <div id="view-dashboard"></div>
+    <div id="view-wallet" class="hidden"></div>
+    <div id="view-account" class="hidden"></div>
+    <div id="view-transactions" class="hidden"></div>
+    <div id="view-deposit" class="hidden"></div>
+    <div id="view-withdraw" class="hidden"></div>
+    <div id="view-buy" class="hidden"></div>
+    <div id="view-kyc" class="hidden"></div>
+    <div id="view-support" class="hidden"></div>
+  </div>
+</div>
+<div id="modalRoot"></div>
+<script src="/js/api.js"></script>
+<script src="/js/countries.js"></script>
+<script src="/js/user.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryptoGuard — Admin Login</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+      <div class="brand-name">Crypto<span>Guard</span> <span class="muted" style="font-size:13px;font-weight:600;">Admin</span></div>
+    </div>
+    <div class="demo-banner">⚠ Demo environment — no real funds or blockchain networks are involved.</div>
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-user-shield"></i> Admin Login</div>
+      <div class="field"><label>Username</label><input id="loginUsername" placeholder="Admin username"></div>
+      <div class="field" style="margin-bottom:8px;"><label>Password</label><input id="loginPassword" type="password" placeholder="Admin password"></div>
+      <button class="btn btn-primary btn-block" id="loginBtn">Sign In</button>
+      <div class="login-note">Use the admin credentials configured in your server's <span class="mono">.env</span> file.</div>
+      <div class="login-note"><a href="/user-login.html" style="color:var(--purple-2);">Not an admin? Sign in here</a></div>
+      <div class="login-note"><a href="/index.html" style="color:var(--text-faint);">&larr; Back</a></div>
+    </div>
+  </div>
+</div>
+<script src="/js/api.js"></script>
+<script>
+if (Session.token && Session.role === 'admin') window.location.href = '/admin.html';
+
+function toast(msg, type){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast' + (type==='err'?' err':type==='ok'?' ok':'');
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>el.remove(), 3600);
+}
+
+document.getElementById('loginBtn').addEventListener('click', async ()=>{
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if(!username || !password){ toast('Enter username and password','err'); return; }
+  try{
+    const data = await api('/auth/login', { method:'POST', body:{ role:'admin', username, password } });
+    Session.set(data.token, data.role, data.name);
+    window.location.href = '/admin.html';
+  }catch(e){
+    toast(e.message, 'err');
+  }
+});
+document.getElementById('loginPassword').addEventListener('keydown', e=>{
+  if(e.key==='Enter') document.getElementById('loginBtn').click();
+});
+</script>
+</body>
+</html>
