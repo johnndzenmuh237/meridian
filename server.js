@@ -40,7 +40,12 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`CryptoGuard demo running on http://localhost:${PORT}`);
-  console.log(`Database: ${DB_PATH} (${driver}) - local file, no internet or setup needed`);
-});
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`CryptoGuard demo running on http://localhost:${PORT}`);
+    console.log(`Database: ${DB_PATH} (${driver}) - local file, no internet or setup needed`);
+  });
+}
+
+module.exports = app;
