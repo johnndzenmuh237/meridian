@@ -8,8 +8,9 @@
 const path = require('path');
 const fs = require('fs');
 
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'data', 'cryptoguard.db');
-fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+const DB_PATH = process.env.DB_PATH || (process.env.VERCEL
+  ? '/tmp/cryptoguard.db'
+  : path.join(__dirname, '..', 'data', 'cryptoguard.db'));
 
 let db;
 let driver;
